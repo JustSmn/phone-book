@@ -6,7 +6,6 @@ import (
 	"os"
 	"regexp"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -143,99 +142,5 @@ func matchTel(s string) bool {
 }
 
 func main() {
-	arguments := os.Args
-	if len(arguments) == 1 {
-		fmt.Println("Usage: insert|delete|search|list <arguments>")
-		return
-	}
-
-	// If the CSVFILE does not exist, create an empty one
-	_, err := os.Stat(CSVFILE)
-	// If error is not nil, it means that the file does not exist
-	if err != nil {
-		fmt.Println("Creating", CSVFILE)
-		f, err := os.Create(CSVFILE)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		f.Close()
-	}
-
-	fileInfo, err := os.Stat(CSVFILE)
-	// Is it a regular file?
-	mode := fileInfo.Mode()
-	if !mode.IsRegular() {
-		fmt.Println(CSVFILE, "not a regular file!")
-		return
-	}
-
-	err = readCSVFile(CSVFILE)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = createIndex()
-	if err != nil {
-		fmt.Println("Cannot create index.")
-		return
-	}
-
-	// Differentiating between the commands
-	switch arguments[1] {
-	case "insert":
-		if len(arguments) != 5 {
-			fmt.Println("Usage: insert Name Surname Telephone")
-			return
-		}
-		t := strings.ReplaceAll(arguments[4], "-", "")
-		if !matchTel(t) {
-			fmt.Println("Not a valid telephone number:", t)
-			return
-		}
-		temp := initS(arguments[2], arguments[3], t)
-		// If it was nil, there was an error
-		if temp != nil {
-			err := insert(temp)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-		}
-	case "delete":
-		if len(arguments) != 3 {
-			fmt.Println("Usage: delete Number")
-			return
-		}
-		t := strings.ReplaceAll(arguments[2], "-", "")
-		if !matchTel(t) {
-			fmt.Println("Not a valid telephone number:", t)
-			return
-		}
-		err := deleteEntry(t)
-		if err != nil {
-			fmt.Println(err)
-		}
-	case "search":
-		if len(arguments) != 3 {
-			fmt.Println("Usage: search Number")
-			return
-		}
-		t := strings.ReplaceAll(arguments[2], "-", "")
-		if !matchTel(t) {
-			fmt.Println("Not a valid telephone number:", t)
-			return
-		}
-		temp := search(t)
-		if temp == nil {
-			fmt.Println("Number not found:", t)
-			return
-		}
-		fmt.Println(*temp)
-	case "list":
-		list()
-	default:
-		fmt.Println("Not a valid option")
-	}
+	fmt.Println("Hello World")
 }
